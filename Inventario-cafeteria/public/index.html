@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title> Cafeteria Inventory</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <header>
+    <h1> Cafeteria Inventory  <span id="school">[SCHOOL NAME]</span></h1>
+    <nav>
+      <button data-tab="dashboard" class="active"> Dashboard</button>
+      <button data-tab="supplies"> Supplies</button>
+      <button data-tab="movement"> Movement</button>
+    </nav>
+  </header>
+
+  <!-- ===== PESTAnA 1: PANEL ===== -->
+  <section id="tab-dashboard" class="tab active">
+    <div class="kpis">
+      <div class="kpi"><b id="k-supplies">–</b><small>Supplies</small></div>
+      <div class="kpi critical"><b id="k-alerts">–</b><small>Open alerts</small></div>
+      <div class="kpi"><b id="k-critical">–</b><small>In critical stock</small></div>
+      <div class="kpi ok"><b id="k-value">–</b><small>Inventory value</small></div>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <h2> Automatic restock alerts</h2>
+        <div id="alert-list" class="alerts"><p class="muted">Loading…</p></div>
+      </div>
+      <div class="card">
+        <h2> Inflows / Outflows (7 days)</h2>
+        <canvas id="chart-canvas" height="160"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PESTAÑA 2: INSUMOS ===== -->
+  <section id="tab-supplies" class="tab">
+    <div class="toolbar">
+      <input id="search" type="text" placeholder=" Search supply…">
+      <select id="filter-cat">
+        <option value="">All categories</option>
+        <option value="beverage"> Beverage</option>
+        <option value="dairy"> Dairy</option>
+        <option value="sweetener"> Sweetener</option>
+        <option value="packaging"> Packaging</option>
+        <option value="pastry"> Pastry</option>
+      </select>
+      <button class="btn primary" onclick="openModal()"> New supply</button>
+    </div>
+    <table class="table">
+      <thead><tr>
+        <th>Supply</th><th>Category</th><th>Unit</th><th>Stock</th><th>Min</th><th>Status</th><th></th>
+      </tr></thead>
+      <tbody id="tbody-supplies"><tr><td colspan="7" class="muted">Loading…</td></tr></tbody>
+    </table>
+  </section>
+
+  <!-- ===== PESTAÑA 3: MOVIMIENTO ===== -->
+  <section id="tab-movement" class="tab">
+    <div class="card form-movement">
+      <h2> Register stock movement</h2>
+      <div class="radio">
+        <label><input type="radio" name="type" value="outflow" checked> ➖ Outflow (usage/event/waste)</label>
+        <label><input type="radio" name="type" value="inflow"> ➕ Inflow (supplier purchase)</label>
+      </div>
+      <label>Supply
+        <select id="mov-product"></select>
+      </label>
+      <div class="row">
+        <label>Quantity <input id="mov-qty" type="number" min="1" value="1"></label>
+        <label>Reason
+          <select id="mov-reason">
+            <option value="">(optional)</option>
+            <option>Morning shift</option>
+            <option>Afternoon shift</option>
+            <option>Espresso/latte prep</option>
+            <option>Campus event</option>
+            <option>Waste / expiry</option>
+            <option>Restock purchase</option>
+          </select>
+        </label>
+      </div>
+      <button class="btn primary lg" onclick="registerMovement()">✔ Register</button>
+      <p class="hint">On register, the system recalculates stock and <b>raises the alert automatically</b> if it crosses the minimum.</p>
+    </div>
+  </section>
+
+  <!-- ===== MODAL CRUD ===== -->
+  <div id="modal" class="modal">
+    <div class="modal-box">
+      <h2 id="modal-title">New supply</h2>
+      <input type="hidden" id="p-id">
+      <label>Name <input id="p-name" type="text"></label>
+      <div class="row">
+        <label>Category
+          <select id="p-cat">
+            <option value="beverage">Beverage</option><option value="dairy">Dairy</option>
+            <option value="sweetener">Sweetener</option><option value="packaging">Packaging</option>
+            <option value="pastry">Pastry</option>
+          </select>
+        </label>
+        <label>Unit <input id="p-unit" type="text" placeholder="Liter, Kg, Pack…"></label>
+      </div>
+      <div class="row">
+        <label>Cost price <input id="p-cost" type="number" step="0.01" min="0"></label>
+        <label>Supplier <select id="p-supplier"></select></label>
+      </div>
+      <div class="row">
+        <label>Current stock <input id="p-stock" type="number" min="0"></label>
+        <label>Min stock <input id="p-min" type="number" min="0"></label>
+      </div>
+      <div class="modal-actions">
+        <button class="btn" onclick="closeModal()">Cancel</button>
+        <button class="btn primary" onclick="saveProduct()">💾 Save</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toasts"></div>
+  <script src="app.js"></script>
+</body>
+</html>
