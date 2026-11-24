@@ -23,6 +23,7 @@ app.get('/api/suppliers', async (q, r, n) => { try { r.json(await prod.listSuppl
 // ---- Movimientos (aqui vive la automatizacion) ----
 app.post('/api/movements', async (q, r, n) => { try { r.json(await prod.registerMovement(q.body)); } catch (e) { n(e); } });
 app.get('/api/movements', async (q, r, n) => { try { r.json(await prod.recentMovements()); } catch (e) { n(e); } });
+app.get('/api/movements/history', async (q, r, n) => { try { r.json(await prod.movementHistory()); } catch (e) { n(e); } });
 
 // ---- Alertas ----
 app.get('/api/alerts', async (q, r, n) => { try { r.json(await listAlerts()); } catch (e) { n(e); } });

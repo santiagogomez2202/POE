@@ -88,6 +88,17 @@
       <button class="btn primary lg" onclick="registerMovement()">✔ Register</button>
       <p class="hint">On register, the system recalculates stock and <b>raises the alert automatically</b> if it crosses the minimum.</p>
     </div>
+    <div class="card movement-history">
+      <h2>Movement history</h2>
+      <div class="table-wrap">
+        <table class="table movement-table">
+          <thead><tr>
+            <th>Date</th><th>Supply</th><th>Type</th><th>Quantity</th><th>Reason</th>
+          </tr></thead>
+          <tbody id="tbody-movements"><tr><td colspan="5" class="muted">Loading…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
   </section>
 
   <!-- ===== MODAL CRUD ===== -->

@@ -32,6 +32,12 @@ nav button.active,nav button:hover{background:rgba(255,255,255,.18);opacity:1}
 .table{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.08)}
 .table th{background:var(--crema);color:var(--moka);text-align:left;padding:10px 12px;font-size:.82rem;text-transform:uppercase;letter-spacing:.4px}
 .table td{padding:10px 12px;border-bottom:1px solid #f1e9dd}
+.table-wrap{overflow-x:auto;border-radius:12px}
+.movement-history{margin-top:18px}
+.movement-table{min-width:620px}
+.movement-type{display:inline-block;padding:3px 9px;border-radius:6px;font-size:.78rem;font-weight:600}
+.movement-type.inflow{background:#e8f5e9;color:var(--ok)}
+.movement-type.outflow{background:#ffebee;color:var(--crit)}
 .table tr.critical{background:#fff0f0}
 .chip{padding:2px 10px;border-radius:999px;font-size:.78rem;font-weight:600}
 .chip.beverage{background:#efe3d6;color:#6d4c41}.chip.dairy{background:#e3f2fd;color:#1565c0}

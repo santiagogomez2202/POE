@@ -50,6 +50,13 @@ const recentMovements = (days = 7) => pool.query(`
   GROUP BY day, type
   ORDER BY day`, [days]).then(r => r[0]);
 
+const movementHistory = () => pool.query(`
+  SELECT m.id, m.product_id, p.name AS product_name, m.type,
+         m.quantity, m.reason, m.created_at
+  FROM movements m
+  JOIN products p ON p.id = m.product_id
+  ORDER BY m.created_at DESC, m.id DESC`).then(r => r[0]);
+
 // KPIs del panel
 async function summary() {
   const [[k]] = await pool.query(`
@@ -61,4 +68,4 @@ async function summary() {
   return k;
 }
 
-module.exports = { list, get, create, update, remove, listSuppliers, registerMovement, recentMovements, summary };
+module.exports = { list, get, create, update, remove, listSuppliers, registerMovement, recentMovements, movementHistory, summary };

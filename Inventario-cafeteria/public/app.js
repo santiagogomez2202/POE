@@ -31,9 +31,9 @@ document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
 // ===== Carga general =====
 let productsCache = [];
 async function loadAll(){
-  const [sum, products, alerts, movs, provs] = await Promise.all([
+  const [sum, products, alerts, movs, history, provs] = await Promise.all([
     api('/api/summary'), api('/api/products'), api('/api/alerts'),
-    api('/api/movements'), api('/api/suppliers')
+    api('/api/movements'), api('/api/movements/history'), api('/api/suppliers')
   ]);
   productsCache = products;
 
@@ -46,6 +46,7 @@ async function loadAll(){
   renderAlerts(alerts);
   renderTable(products);
   renderChart(movs);
+  renderMovementTable(history);
   fillSelects(provs, products);
 }
 
@@ -102,6 +103,41 @@ function renderChart(movs){
       {label:'Outflows', data:outf, backgroundColor:'#c62828'}
     ]},
     options:{ responsive:true, plugins:{legend:{position:'bottom'}}, scales:{y:{beginAtZero:true, ticks:{precision:0}}} }
+  });
+}
+
+function renderMovementTable(movements){
+  const tbody = $('#tbody-movements');
+  tbody.replaceChildren();
+  if(!movements.length){
+    const row = tbody.insertRow();
+    const cell = row.insertCell();
+    cell.colSpan = 5;
+    cell.className = 'muted';
+    cell.textContent = 'No movements recorded yet';
+    return;
+  }
+  movements.forEach(m => {
+    const row = tbody.insertRow();
+    const date = new Date(m.created_at);
+    const values = [
+      Number.isNaN(date.getTime()) ? m.created_at : date.toLocaleString(),
+      m.product_name,
+      m.type,
+      m.quantity,
+      m.reason || '-'
+    ];
+    values.forEach((value, index) => {
+      const cell = row.insertCell();
+      if(index === 2){
+        const badge = document.createElement('span');
+        badge.className = `movement-type ${m.type}`;
+        badge.textContent = m.type === 'inflow' ? 'Inflow' : 'Outflow';
+        cell.appendChild(badge);
+      } else {
+        cell.textContent = value == null ? '-' : String(value);
+      }
+    });
   });
 }
 

@@ -40,3 +40,4 @@ CREATE TABLE alerts (
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
 );
+
